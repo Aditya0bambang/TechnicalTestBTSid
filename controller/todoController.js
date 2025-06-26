@@ -117,6 +117,62 @@ class TodoController {
       });
     }
   }
+
+  // created after time is up, just for finishing
+
+  static async deleteItemByChecklistItemId(req, res) {
+    try {
+      const { checklistid, checklistItemId } = req.params;
+      const foundTask = await Todo.findByIdAndDelete(checklistItemId).lean();
+      if (!foundTask) {
+        return res.status(404).json({
+          statusCode: 404,
+          message: "Item not found",
+        });
+      }
+      res.status(204).json({
+        statusCode: 204,
+        message: "Item Deleted",
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        statusCode: 500,
+        message: "Internal Server Error",
+      });
+    }
+  }
+
+  static async renameItemByChecklistItemId(req, res) {
+    try {
+      const { checklistid, checklistItemId } = req.params;
+      const { itemName } = req.body;
+      const foundTask = await Todo.findByIdAndUpdate(
+        checklistItemId,
+        {
+          taskName: itemName,
+        },
+        { new: true }
+      ).lean();
+      if (!foundTask) {
+        return res.status(404).json({
+          statusCode: 404,
+          message: "Item not found",
+        });
+      }
+      res.status(200).json({
+        statusCode: 200,
+        message: "Item Status",
+        data: foundTask,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        statusCode: 500,
+        message: "Internal Server Error",
+      });
+    }
+  }
 }
 
 module.exports = TodoController;

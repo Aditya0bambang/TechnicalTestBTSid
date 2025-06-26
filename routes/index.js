@@ -27,5 +27,13 @@ router.put(
   "/checklist/:checklistId/item/:checklistItemId",
   todo.updateStatusChecklistItemInChecklistById
 );
+router.delete(
+  "/checklist/:checklistId/item/:checklistItemId",
+  todo.deleteItemByChecklistItemId
+);
+router.put(
+  "/checklist/:checklistId/item/rename/:checklistItemId",
+  todo.renameItemByChecklistItemId
+);
 
 module.exports = router;
