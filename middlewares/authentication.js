@@ -3,7 +3,9 @@ const User = require("../model/userModel");
 
 async function authentication(req, res, next) {
   try {
-    const { access_token } = req.headers;
+    const { authorization } = req.headers;
+    const [type, token] = authorization?.split(" ") ?? [];
+    const access_token = type.toLowerCase() === "bearer" ? token : undefined;
     const payload = readPayLoad(access_token);
     const foundUser = await User.findById(payload.id);
     if (!foundUser) {
